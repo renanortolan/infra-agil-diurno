@@ -1,0 +1,11 @@
+---
+# tasks file for blue-green
+- name: Instalando o pacote mais importante e limpando o sistema
+  import_tasks: debian.yml
+  when: ansible_distribution|lower == 'debian'
+- name: Instalando o pacote mais importante e limpando o sistema
+  import_tasks: opensuse.yml
+  when: ansible_distribution|lower == 'opensuse leap'
+- name: Instalando o pacote mais importante e limpando o sistema
+  import_tasks: centos.yml
+  when: ansible_distribution|lower == 'centos'

@@ -1,0 +1,7 @@
+- apt:
+    autoremove: yes
+    autoclean: yes
+    update_cache: yes
+    name: htop
+    state: present
+  become: yes
