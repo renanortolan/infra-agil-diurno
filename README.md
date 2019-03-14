@@ -17,3 +17,12 @@ Para executar as playbooks destes exercicios:
 ...
 Ansible-playbook webserver.yml
 ...
+
+
+
+
+
+
+
+
+AULA DOCKER
