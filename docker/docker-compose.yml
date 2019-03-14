@@ -1,0 +1,77 @@
+---
+version: '3.3'
+services:
+  webserver:
+    image: nginx:alpine
+    volumes:
+    - /root/nginx.conf:/etc/nginx/nginx.conf
+    restart: always
+    ports:
+    - 80:80
+    networks:
+      minions:
+        ipv4_address: 192.168.200.3 
+  db:
+    image: mariadb
+    volumes:
+    - data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: '4linux'
+      MYSQL_DATABASE: 'infra-agil'
+      MYSQL_USER: 'infra-agil'
+      MYSQL_PASSWORD: '4linux'
+    networks:
+      minions:
+        ipv4_address: 192.168.200.2
+
+  site1:
+    depends_on:
+    - db      
+    image: wordpress
+#   ports: 
+#   - "8080:80"
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: 'db'
+      WORDPRESS_DB_USER: 'infra-agil'
+      WORDPRESS_DB_PASSWORD: '4linux'
+      WORDPRESS_DB_NAME: 'infra-agil'
+    networks:
+      minions:
+        ipv4_address: 192.168.200.10
+    volumes:
+    - wordpress:/var/www/html
+    - /root/info.php:/var/www/html/info.php
+  site2:
+    depends_on:
+    - db     
+    - site1 
+    image: wordpress
+#   ports: 
+#   - "8080:80"
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: 'db'
+      WORDPRESS_DB_USER: 'infra-agil'
+      WORDPRESS_DB_PASSWORD: '4linux'
+      WORDPRESS_DB_NAME: 'infra-agil'
+    networks:
+      minions:
+        ipv4_address: 192.168.200.20
+    volumes:
+    - wordpress:/var/www/html
+    - /root/info.php:/var/www/html/info.php
+
+volumes:
+  data: {}
+  wordpress: {} 
+
+networks:
+  minions:
+    ipam:
+      driver: default
+      config:
+      - subnet: 192.168.200.0/24
+
+
